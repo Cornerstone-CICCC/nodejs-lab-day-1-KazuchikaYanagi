@@ -1,0 +1,51 @@
+---
+
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>Astro</title>
+	</head>
+	<body>
+		<h1>profile</h1>
+		<p>Here is SECRET PAGE</p>
+
+		<div class="api-data">
+			<span>Username: <h1 class="username"></h1></span>
+			<span>Firstname: <h1 class="firstname"></h1></span>
+			<span>Lastname: <h1 class="lastname"></h1></span>
+		</div>
+
+		<button class="logout">Log out</button>
+	</body>
+	<script>
+		const logout = document.querySelector(".logout") as HTMLFormElement
+
+		const loadProfile = async () => {
+			const res = await fetch('http://localhost:3001/check-auth', 
+			{
+          		credentials: 'include'
+			})
+			const data = await res.json()
+
+			if (res.ok) {
+				// console.log(data)
+				(document.querySelector(".api-data span .username") as HTMLHeadElement).innerText = data.username;
+				(document.querySelector(".api-data span .firstname") as HTMLHeadElement).innerText = data.firstname;
+				(document.querySelector(".api-data span .lastname") as HTMLHeadElement).innerText = data.lastname;
+			} else {
+				console.error(data)
+			}
+		}
+		loadProfile()
+
+		logout.addEventListener('click', (e) => {
+				e.preventDefault()
+				window.location.href = "/login"
+			})
+	</script>
+</html>
