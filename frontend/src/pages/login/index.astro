@@ -1,0 +1,60 @@
+---
+
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>Astro</title>
+	</head>
+	<body>
+		<h1>login</h1>
+		<form class="form">
+			<label for="">
+				<span>Username: </span>
+				<input type="text" name="username" autocomplete="off" id="username" required>
+			</label>
+			<label for="">
+				<span>Password: </span>
+				<input type="password" id="password" name="password" autocomplete="off" required>
+			</label>
+			<button type="submit">Log in</button>
+		</form>
+
+		<script>
+			const form = document.querySelector(".form") as HTMLFormElement
+
+			form.addEventListener("submit", async(e) => {
+
+				e.preventDefault()
+				const formData = new FormData(form)
+				const username = formData.get('username')
+				const password = formData.get('password')
+				console.log(JSON.stringify({ username, password }))
+				const response = await fetch(`http://localhost:3001/login`, {
+					method: 'POST',
+					headers: {
+						"Content-Type": 'application/json',
+					},
+					body: JSON.stringify({
+						"username": username,
+						"password": password
+					}),
+					credentials: 'include'
+				})
+				const data = await response.json()
+				console.log(data)
+
+				if (response.ok) {
+					window.location.href = "/profile"
+				} else {
+					alert("Login failed!")
+				}
+			})
+
+		</script>
+	</body>
+</html>
